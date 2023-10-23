@@ -15,15 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder>  {
 
     private Context context;
-    private List<ContactsModel> contactList;
+    private ArrayList<ContactsModel> contactList;
+    private View.OnClickListener onClickListener;
 
-    public ContactAdapter(Context context, List<ContactsModel> contactList) {
+    public ContactAdapter(Context context, ArrayList<ContactsModel> contactList) {
         this.context = context;
         this.contactList = contactList;
     }
@@ -37,7 +39,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    public void filterList(List<ContactsModel> filterlist) {
+    public void filterList(ArrayList<ContactsModel> filterlist) {
         contactList = filterlist;
         notifyDataSetChanged();
     }
@@ -50,23 +52,33 @@ holder.contactName.setText(model.getContactName());
         ColorGenerator generator = ColorGenerator.MATERIAL;
 
         int color = generator.getRandomColor();
+        int gradient = R.drawable.lettercard;
         TextDrawable drawable = new TextDrawable.Builder()
                 .setShape(TextDrawable.SHAPE_ROUND)
                 .setColor(color)
                 .setText("A")
-                .setFontSize(8)
+                .setFontSize(60)
                 .setRadius(2)
                 .build();
 
         holder.contactImage.setImageDrawable(drawable);
 
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(context, ContactDetail.class);
+//                i.putExtra("name", model.getContactName());
+//                i.putExtra("contact", model.getContactNumber());
+//                context.startActivity(i);
+//            }
+//        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, ContactDetail.class);
-                i.putExtra("name", model.getContactName());
-                i.putExtra("contact", model.getContactNumber());
-                context.startActivity(i);
+                if (onClickListener != null) {
+                    onClickListener.onClick(view);
+                }
             }
         });
     }
@@ -74,6 +86,14 @@ holder.contactName.setText(model.getContactName());
     @Override
     public int getItemCount() {
         return contactList.size();
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = (View.OnClickListener) onClickListener;
+    }
+
+    public interface OnClickListener {
+        void onClick(int position, ContactsModel model);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

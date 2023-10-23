@@ -45,7 +45,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVContacts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"/>
 
 
 </LinearLayout>
